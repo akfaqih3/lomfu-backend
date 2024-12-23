@@ -84,4 +84,14 @@ class UserUpdateSerializer(serializers.Serializer):
     photo = serializers.ImageField(required=False)
     bio = serializers.CharField(max_length=255, required=False)
 
+
+
+
+
+class OTPSendSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
     
+class OTPVerifySerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    otp = serializers.CharField(max_length=6)

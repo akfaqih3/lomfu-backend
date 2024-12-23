@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-
+from datetime import timedelta
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-s%zv=m%3t)u-k^@gt0gpu83@mm21#vo35v#5-&yrx&4t9^9l6d'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     # 3rd party
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
 
     # apps
     'api',
@@ -83,8 +85,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': config('DB_ENGINE'),
+        'NAME': config('DB_NAME'),
+        # 'USER': config('DB_USER'),
+        # 'PASSWORD': config('DB_PASSWORD'),
+        # 'HOST': config('DB_HOST'),
+        # 'PORT': config('DB_PORT'),
+        # 'OPTIONS': {
+        #     'client_encoding': 'utf8',
+        # }
     }
 }
 
@@ -124,6 +133,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR.parent / 'static'
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR.parent / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -138,4 +151,26 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+}
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # مدة صلاحية التوكن
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # مدة صلاحية التوكن القابل للتجديد
+    'AUTH_HEADER_TYPES': ('Bearer',),               # نوع الهيدر المستخدم
+}
+
+JWT_AUTH = {
+    'JWT_ALLOW_REFRESH': True,                       # السماح للتوكن القابل للتجديد
+    'JWT_EXPIRATION_DELTA': timedelta(days=1),       # مدة صلاحية التوكن
+    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),  # مدة صلاحية التوكن القابل للتجديد
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',              # بادئة الهيدر المستخدم            
+}
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-cache-name',
+    }
 }

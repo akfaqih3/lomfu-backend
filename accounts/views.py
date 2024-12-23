@@ -1,21 +1,31 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .serializers import (
     UserInputSerializer,
     UserOutputSerializer,
     UserUpdateSerializer,
+    OTPSendSerializer,
+    OTPVerifySerializer,
 )
 
 from .services import (
     user_create,
     user_update,
     user_delete,
+    send_otp,
+    verify_otp,
 )
 from .selectors import (
     user_by_id,
 )
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 class UserCreateAPI(APIView):
     serializer_class = UserInputSerializer
@@ -73,3 +83,34 @@ class UserDeleteAPI(APIView):
         if user_delete(user):
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+    
+class OTPSendAPI(APIView):
+    authentication_classes = []
+    permission_classes = []
+    serializer_class = OTPSendSerializer
+    def post(self, request):
+        serializer = OTPSendSerializer(data=request.data)
+        if serializer.is_valid():
+            if send_otp(serializer.data["email"]):
+                return Response({"message": "OTP sent successfully."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class OTPVerifyAPI(APIView):
+    authentication_classes = []
+    permission_classes = []
+    serializer_class = OTPVerifySerializer
+    def post(self, request):
+        serializer = OTPVerifySerializer(data=request.data)
+        if serializer.is_valid():
+            if verify_otp(serializer.data["email"],serializer.data["otp"]):
+                user = get_object_or_404(User, email=serializer.data["email"])
+                refresh = RefreshToken.for_user(user)
+                token = {
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token)
+                }
+                return Response(token, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
