@@ -1,0 +1,33 @@
+### activate
+POST http://127.0.0.1:8000/api/v1/accounts/otp-send/
+Content-Type: application/json
+
+{
+    "email": "student1@gmail.com"
+}
+
+### verify
+POST http://127.0.0.1:8000/api/v1/accounts/otp-verify/
+Content-Type: application/json
+
+{
+    "email": "student1@gmail.com",
+    "otp": "302668"
+}
+
+### login
+POST http://127.0.0.1:8000/api/v1/accounts/login/
+Content-Type: application/json
+
+{
+    "email": "student1@gmail.com",
+    "password": "Password333"
+}
+
+
+
+
+### profile
+GET http://127.0.0.1:8000/api/v1/accounts/profile/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM0OTg0MzUwLCJpYXQiOjE3MzQ5ODA3NTAsImp0aSI6IjUxYjc1NzgxMDE0NDQzNjRiODcyMDhkOWIwMTA1OThmIiwidXNlcl9pZCI6MX0.hKHoPrzL0nFeEzGB89N_jZmVEYXYa4JIg3aLHNRNRR4
