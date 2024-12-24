@@ -4,15 +4,18 @@ from django.conf import settings
 from django.core.mail import send_mail
 from .utils import OTP_manager
 from rest_framework import serializers
+from django.contrib.auth.models import Group
 
 def user_create(name, email, role, password, phone=None):
     
     try:
         user = User.objects.create_user(email, password)
-        user.name = name
+        user.name = name if name else None
         if phone is not None:
             user.phone = phone
         user.role = role
+        user.groups.clear()
+        user.groups.add(Group.objects.get(name=role))
         user.save()
     except Exception as e:
         raise serializers.ValidationError(e)
@@ -53,3 +56,26 @@ def verify_otp(email: str, otp: str):
         user.save()
         return user
     raise serializers.ValidationError("Invalid OTP.")
+
+
+def user_update(user, name=None, email=None, phone=None, role=None, photo=None, bio=None):
+    if name is not None:
+        user.name = name
+    if email is not None:
+        if User.objects.exclude(id=user.id).filter(email=email).first():
+            raise serializers.ValidationError('Email already exists')
+    if phone is not None:
+        user.phone = phone
+    if role is not None:
+        user.role = role
+
+    user.groups.clear()
+    user.groups.add(Group.objects.get(name=role))
+
+    if photo is not None:
+        user.profile.photo = photo
+    if bio is not None:
+        user.profile.bio = bio
+    user.profile.save()
+    user.save()
+    return user

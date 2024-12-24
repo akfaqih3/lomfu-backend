@@ -37,7 +37,6 @@ class PasswordValidator:
 class EmailValidator:
     
     def validate(self, email):
-        print("email")
         if not email:
             raise serializers.ValidationError('The given email must be set')
         if User.objects.filter(email=email).first():

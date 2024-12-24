@@ -21,7 +21,6 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
     Handles password reset tokens
     When a token is created, an e-mail needs to be sent to the user
     """
-    print("====================================")
     context = {
         'current_user': reset_password_token.user,
         'name': reset_password_token.user.name,

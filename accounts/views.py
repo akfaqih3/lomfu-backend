@@ -10,12 +10,14 @@ from .serializers import (
     UserOutputSerializer,
     OTPSendSerializer,
     OTPVerifySerializer,
+    UserUpdateSerializer,
 )
 
 from .services import (
     user_create,
     send_otp,
     verify_otp,
+    user_update,
 )
 
 from django.shortcuts import get_object_or_404
@@ -81,4 +83,23 @@ class UserProfileAPI(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 
+class UserUpdateAPI(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserUpdateSerializer
+    def put(self, request):
+        user = request.user
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            user_update(
+                user,
+                serializer.data['name'] if 'name' in serializer.data else None,
+                serializer.data['email'] if 'email' in serializer.data else None,
+                serializer.data['phone'] if 'phone' in serializer.data else None,
+                serializer.data['role'] if 'role' in serializer.data else None,
+                serializer.data['photo'] if 'photo' in serializer.data else None,
+                serializer.data['bio'] if 'bio' in serializer.data else None,
+            )
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

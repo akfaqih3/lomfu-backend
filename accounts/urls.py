@@ -11,6 +11,7 @@ from .views import (
     UserProfileAPI,
     OTPSendAPI,
     OTPVerifyAPI,
+    UserUpdateAPI,
 )
 
 urlpatterns = [
@@ -19,7 +20,9 @@ urlpatterns = [
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('logout/', TokenBlacklistView.as_view(), name='token_blacklist'),
     path('password-reset/', include('django_rest_passwordreset.urls'), name='password_reset'),
-    path('create/', UserCreateAPI.as_view()),
+
+    path('register/', UserCreateAPI.as_view()),
+    path('update/', UserUpdateAPI.as_view()),
     path('profile/', UserProfileAPI.as_view()),
     path('otp-send/', OTPSendAPI.as_view()),
     path('otp-verify/', OTPVerifyAPI.as_view()),

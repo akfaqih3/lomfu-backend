@@ -3,7 +3,7 @@ POST http://127.0.0.1:8000/api/v1/accounts/otp-send/
 Content-Type: application/json
 
 {
-    "email": "student1@gmail.com"
+    "email": "student3@gmail.com"
 }
 
 ### verify
@@ -12,7 +12,7 @@ Content-Type: application/json
 
 {
     "email": "student1@gmail.com",
-    "otp": "302668"
+    "otp": "759228"
 }
 
 ### login
@@ -21,13 +21,24 @@ Content-Type: application/json
 
 {
     "email": "student1@gmail.com",
-    "password": "Password333"
+    "password": "password333"
 }
-
-
 
 
 ### profile
 GET http://127.0.0.1:8000/api/v1/accounts/profile/
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM0OTg0MzUwLCJpYXQiOjE3MzQ5ODA3NTAsImp0aSI6IjUxYjc1NzgxMDE0NDQzNjRiODcyMDhkOWIwMTA1OThmIiwidXNlcl9pZCI6MX0.hKHoPrzL0nFeEzGB89N_jZmVEYXYa4JIg3aLHNRNRR4
+
+
+### update
+PUT http://127.0.0.1:8000/api/v1/accounts/update/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM1MDQ1NjY4LCJpYXQiOjE3MzUwNDIwNjgsImp0aSI6ImEyMDhjZjFlM2Q4NjQ1ZjE4NzUzZTNjOTUxZTg0MmIyIiwidXNlcl9pZCI6Mn0.2LbbDkZrtTGcahg2z_Zs5WCuqRrQ6l1HRlfHD4kK-Pw
+
+{
+    "name": "student1",
+    "email": "student1@gmail.com",
+    "role": "student",
+    "bio": "I am student"
+}

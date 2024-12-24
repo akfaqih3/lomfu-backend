@@ -49,3 +49,21 @@ class OTPVerifySerializer(serializers.Serializer):
     email = serializers.EmailField()
     otp = serializers.CharField(max_length=6)
 
+
+class UserUpdateSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=100, required=False)
+    email = serializers.EmailField(required=False)
+    phone = serializers.CharField(max_length=9, required=False)
+    role = serializers.ChoiceField(choices=UserRole.choices, required=False)
+    photo = serializers.ImageField(required=False)
+    bio = serializers.CharField(max_length=255, required=False)
+
+    def validate(self, data):
+        
+        if 'phone' in data:
+            PhoneValidator().validate(data['phone'])
+        else:
+            if data['role'] == UserRole.TEACHER:
+                raise serializers.ValidationError('Teachers must have a phone number')
+                
+        return data
