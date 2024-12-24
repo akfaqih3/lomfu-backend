@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import User
 
 class PasswordValidator:
-    def __init__(self, min_length=8, max_length=64,upper=True,lower=True,number=True,special=True):
+    def __init__(self, min_length=8, max_length=64,upper=False,lower=True,number=True,special=False):
         self.min_length = min_length
         self.max_length = max_length
         self.upper = upper

@@ -79,3 +79,11 @@ def user_update(user, name=None, email=None, phone=None, role=None, photo=None, 
     user.profile.save()
     user.save()
     return user
+
+
+def user_change_password(user, old_password, new_password):
+    if not user.check_password(old_password):
+        raise serializers.ValidationError("Invalid old password")
+    user.set_password(new_password)
+    user.save()
+    return user

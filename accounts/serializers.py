@@ -67,3 +67,15 @@ class UserUpdateSerializer(serializers.Serializer):
                 raise serializers.ValidationError('Teachers must have a phone number')
                 
         return data
+    
+
+
+class UserChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(max_length=100,style={'input_type':'password'},validators=[PasswordValidator()])
+    new_password = serializers.CharField(max_length=100,style={'input_type':'password'},validators=[PasswordValidator()])
+    confirm_password = serializers.CharField(max_length=100,style={'input_type':'password'},validators=[PasswordValidator()])
+
+    def validate(self, data):
+        if data['new_password'] != data['confirm_password']:
+            raise serializers.ValidationError('Passwords do not match')
+        return data

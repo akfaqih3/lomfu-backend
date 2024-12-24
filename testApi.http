@@ -21,7 +21,7 @@ Content-Type: application/json
 
 {
     "email": "student1@gmail.com",
-    "password": "password333"
+    "password": "student333"
 }
 
 
@@ -41,4 +41,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     "email": "student1@gmail.com",
     "role": "student",
     "bio": "I am student"
+}
+
+### change password
+PUT http://127.0.0.1:8000/api/v1/accounts/password/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM1MDUzNTE3LCJpYXQiOjE3MzUwNDk5MTcsImp0aSI6ImEyY2NiN2E2ZjYzZDQ4YTM4YmVhN2Q3ODM0Yzg0NjFiIiwidXNlcl9pZCI6Mn0.BkoyDveBoFSIHPOBUsOFFLTbL_H8KVbxpiGI_o5nNdc
+
+{
+    "old_password": "password333",
+    "new_password": "student333",
+    "confirm_password": "student333"
 }

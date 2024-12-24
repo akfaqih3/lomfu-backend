@@ -11,6 +11,7 @@ from .serializers import (
     OTPSendSerializer,
     OTPVerifySerializer,
     UserUpdateSerializer,
+    UserChangePasswordSerializer
 )
 
 from .services import (
@@ -18,6 +19,7 @@ from .services import (
     send_otp,
     verify_otp,
     user_update,
+    user_change_password
 )
 
 from django.shortcuts import get_object_or_404
@@ -103,3 +105,21 @@ class UserUpdateAPI(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+
+class UserChangePasswordAPI(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserChangePasswordSerializer
+    def put(self, request):
+        user = request.user
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            user_change_password(
+                user,
+                serializer.data['old_password'],
+                serializer.data['new_password']
+            )
+            return Response({"message": "Password changed successfully."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
