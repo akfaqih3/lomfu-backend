@@ -68,9 +68,8 @@ def user_update(user, name=None, email=None, phone=None, role=None, photo=None, 
         user.phone = phone
     if role is not None:
         user.role = role
-
-    user.groups.clear()
-    user.groups.add(Group.objects.get(name=role))
+        user.groups.clear()
+        user.groups.add(Group.objects.get(name=role))
 
     if photo is not None:
         user.profile.photo = photo

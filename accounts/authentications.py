@@ -2,7 +2,7 @@ from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from .utils import LimitLoginAttempt
-
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -25,6 +25,8 @@ class CustomAuthentication(BaseBackend):
         
         if user.check_password(password):
             login.clear()
+            user.last_login = timezone.now()
+            user.save()
             return user
         login.attempt()
         return None
