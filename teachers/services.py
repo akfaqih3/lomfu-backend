@@ -1,13 +1,7 @@
 from rest_framework.exceptions import ValidationError
-from .models import (
+from courses.models import (
     Subject,
     Course,
-    Module,
-    Content,
-    Text,
-    File,
-    Image,
-    Video
 )
 
 
@@ -27,10 +21,10 @@ def course_create(owner,subject, title, overview, photo=None):
     
     return course
 
-def course_update(slug,subject=None, title=None, overview=None, photo=None):
+def course_update(pk,subject=None, title=None, overview=None, photo=None):
     
     try:
-        course = Course.objects.get(slug=slug)
+        course = Course.objects.get(pk=pk)
         if subject is not None and subject != course.subject.slug:
             course.subject = Subject.objects.get(slug=subject)
         if title is not None:

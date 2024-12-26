@@ -43,7 +43,6 @@ class Course(models.Model):
     )
 
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200, unique=True)
     overview = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     students = models.ManyToManyField(
@@ -59,10 +58,6 @@ class Course(models.Model):
 
     class Meta:
         ordering = ['-created']
-
-    def save(self, *args,**kwargs) -> None:
-        self.slug = slugify(self.title)
-        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

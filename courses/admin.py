@@ -14,6 +14,5 @@ class SubjectAdmin(admin.ModelAdmin):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug', 'subject', 'created',  'photo')
-    search_fields = ('title', 'slug')
-    prepopulated_fields = {'slug': ('title',)}
+    list_display = ('title', 'subject', 'created',  'photo')
+    search_fields = ('title',)

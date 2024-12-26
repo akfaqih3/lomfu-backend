@@ -1,14 +1,8 @@
 from rest_framework import serializers
 
-from .models import (
+from courses.models import (
     Subject,
     Course,
-    Module,
-    Content,
-    Text,
-    File,
-    Image,
-    Video
 )
 
         
@@ -28,4 +22,4 @@ class CourseOutputSerializer(serializers.ModelSerializer):
     subject = serializers.CharField(source='subject.title')
     class Meta:
         model = Course
-        fields = ['title', 'slug', 'subject', 'overview', 'photo','created']
+        fields = ['title', 'subject', 'overview', 'photo','created']

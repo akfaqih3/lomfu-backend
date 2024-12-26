@@ -1,13 +1,7 @@
 from rest_framework.exceptions import ValidationError
-from .models import (
+from courses.models import (
     Subject,
     Course,
-    Module,
-    Content,
-    Text,
-    File,
-    Image,
-    Video
 )
 
 
@@ -19,9 +13,9 @@ def course_list(owner):
     
     return courses
     
-def course_detail(slug):
+def course_detail(pk):
     try:
-        course = Course.objects.get(slug=slug)
+        course = Course.objects.get(pk=pk)
     except Exception as e:
         raise ValidationError(e)
     
