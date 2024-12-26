@@ -31,6 +31,8 @@ User = get_user_model()
 
 class UserCreateAPI(APIView):
     serializer_class = UserInputSerializer
+    permission_classes=[]
+    authentication_classes=[]
     def post(self, request):
         serializer =self.serializer_class(data=request.data)
         if serializer.is_valid():

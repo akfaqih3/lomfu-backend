@@ -15,6 +15,8 @@ class SubjectViewSet(viewsets.ViewSet):
     queryset = Subject.objects.all()
     serializer_class = SubjectsOutputSerializer
     retrieve_serializer_class = SubjectCoursesOutputSerializer
+    permission_classes = []
+    authentication_classes = []
 
     def list(self, request):
         queryset = self.queryset

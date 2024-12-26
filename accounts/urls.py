@@ -25,7 +25,7 @@ urlpatterns = [
     path('register/', UserCreateAPI.as_view()),
     path('profile/', UserProfileAPI.as_view()),
     path('update/', UserUpdateAPI.as_view()),
-    path('password/', UserChangePasswordAPI.as_view()),
+    path('change-password/', UserChangePasswordAPI.as_view()),
     path('otp-send/', OTPSendAPI.as_view()),
     path('otp-verify/', OTPVerifyAPI.as_view()),
 ]
