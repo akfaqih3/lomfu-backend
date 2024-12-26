@@ -25,10 +25,12 @@ from .services import (
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.views import TokenObtainPairView
+from drf_spectacular.utils import extend_schema
 
 User = get_user_model()
 
 
+@extend_schema(tags=['Accounts'])
 class UserCreateAPI(APIView):
     serializer_class = UserInputSerializer
     permission_classes=[]
@@ -47,7 +49,7 @@ class UserCreateAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-    
+@extend_schema(tags=['Accounts'])
 class OTPSendAPI(APIView):
     authentication_classes = []
     permission_classes = []
@@ -59,6 +61,8 @@ class OTPSendAPI(APIView):
                 return Response({"message": "OTP sent successfully."}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@extend_schema(tags=['Accounts'])
 class OTPVerifyAPI(APIView):
     authentication_classes = []
     permission_classes = []
@@ -77,6 +81,7 @@ class OTPVerifyAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(tags=['Accounts'])
 class UserProfileAPI(APIView):
     authentication_classes = [JWTAuthentication]
     serializer_class = UserOutputSerializer
@@ -87,6 +92,7 @@ class UserProfileAPI(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 
+@extend_schema(tags=['Accounts'])
 class UserUpdateAPI(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
@@ -109,6 +115,7 @@ class UserUpdateAPI(APIView):
 
 
 
+@extend_schema(tags=['Accounts'])
 class UserChangePasswordAPI(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]

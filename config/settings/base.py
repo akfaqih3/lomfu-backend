@@ -197,4 +197,20 @@ SPECTACULAR_SETTINGS = {
     'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
     'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
     'REDOC_DIST': 'SIDECAR',
+
+    'APPEND_COMPONENTS_HTML': False,
+    'tags': [
+        {
+            'name': 'Courses',
+            'description': 'Courses related operations',
+        },
+        {
+            'name': 'Teachers',
+            'description': 'Teachers related operations',
+        },
+        {
+            'name': 'Accounts',
+            'description': 'Accounts related operations',
+        },
+    ],
 }

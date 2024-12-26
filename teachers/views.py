@@ -21,6 +21,9 @@ from .selectors import (
     course_detail,
 )
 
+from drf_spectacular.utils import extend_schema
+
+@extend_schema(tags=['Teachers'])
 class CourseCreateAPI(APIView):
     permission_classes = [
         IsAuthenticated,
@@ -42,6 +45,7 @@ class CourseCreateAPI(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@extend_schema(tags=['Teachers'])
 class CourseListAPI(APIView):
     permission_classes = [
         IsAuthenticated,
@@ -56,7 +60,8 @@ class CourseListAPI(APIView):
         courses = self.get_queryset()
         serializer = self.serializer_class(courses, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
+@extend_schema(tags=['Teachers'])
 class CourseDetailAPI(APIView):
     permission_classes = [
         IsAuthenticated,
@@ -74,7 +79,7 @@ class CourseDetailAPI(APIView):
         serializer = self.serializer_class(course)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-
+@extend_schema(tags=['Teachers'])
 class CourseUpdateAPI(APIView):
     permission_classes = [
         IsAuthenticated,
@@ -95,7 +100,9 @@ class CourseUpdateAPI(APIView):
             serializer = self.serializer_class(course)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
+@extend_schema(tags=['Teachers'])
 class CourseDeleteAPI(APIView):
     permission_classes = [
         IsAuthenticated,

@@ -10,6 +10,9 @@ from .serializers import (
     SubjectCoursesOutputSerializer,
 )
 
+from drf_spectacular.utils import extend_schema
+
+@extend_schema(tags=['Courses'])
 class SubjectViewSet(viewsets.ViewSet):
     
     queryset = Subject.objects.all()
