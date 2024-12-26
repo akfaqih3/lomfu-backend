@@ -40,7 +40,7 @@ def send_otp(email: str):
         raise serializers.ValidationError("has already been verified.")
     otp_code = otp.generate_otp(email)
     send_mail(
-        subject='OTP for Yemen Eroud',
+        subject='OTP for lomfu',
         message=f'Your OTP is {otp_code}',
         from_email=settings.EMAIL_HOST_USER,
         recipient_list=[email],

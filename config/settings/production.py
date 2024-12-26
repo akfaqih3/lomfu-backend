@@ -1,11 +1,9 @@
 from .base import *
 from decouple import config
 DEBUG = False
-ALLOWED_HOSTS = ['lomfu.com']
+ALLOWED_HOSTS = ['*']
 
 
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
