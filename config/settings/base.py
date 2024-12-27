@@ -189,9 +189,13 @@ CACHES = {
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'LOMFU',
-    'DESCRIPTION': 'A E learning platform',
+    'DESCRIPTION': (
+        'A E-learning platform\n\n'
+        '**GitHub:** [https://github.com/akfaqih3/lomfu-backend](https://github.com/akfaqih3/lomfu-backend)'
+    ),
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
+
     # OTHER SETTINGS
 
     'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
