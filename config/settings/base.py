@@ -93,13 +93,6 @@ DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE'),
         'NAME': config('DB_NAME'),
-        # 'USER': config('DB_USER'),
-        # 'PASSWORD': config('DB_PASSWORD'),
-        # 'HOST': config('DB_HOST'),
-        # 'PORT': config('DB_PORT'),
-        # 'OPTIONS': {
-        #     'client_encoding': 'utf8',
-        # }
     }
 }
 
@@ -153,11 +146,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom user model
 AUTH_USER_MODEL = 'accounts.User'
 
+# CUSTOM AUTHENTICATION BACKENDS
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
     'accounts.authentications.CustomAuthentication',
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
+# REST FRAMEWORK SETTINGS
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -165,21 +160,17 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-
+# SIMPLE_JWT SETTINGS
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # مدة صلاحية التوكن
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # مدة صلاحية التوكن القابل للتجديد
-    'AUTH_HEADER_TYPES': ('Bearer',),               # نوع الهيدر المستخدم
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # token expiration time
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # refresh token expiration time
+    'AUTH_HEADER_TYPES': ('Bearer',),                # token prefix
+    'UPDATE_LAST_LOGIN': True,                       # update last login column
+    'ROTATE_REFRESH_TOKENS': True,                   # rotate refresh tokens
+    'BLACKLIST_AFTER_ROTATION': True,                # blacklist after rotation
 }
 
-JWT_AUTH = {
-    'JWT_ALLOW_REFRESH': True,                       # السماح للتوكن القابل للتجديد
-    'JWT_EXPIRATION_DELTA': timedelta(days=1),       # مدة صلاحية التوكن
-    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),  # مدة صلاحية التوكن القابل للتجديد
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer',              # بادئة الهيدر المستخدم            
-}
-
-
+# CACHE SETTINGS
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
@@ -187,6 +178,13 @@ CACHES = {
     }
 }
 
+# ACCOUNTS LOGIN LIMIT SETTINGS
+LOGIN_ATTEMPT_LIMIT = 3         
+LOGIN_ATTEMPT_EXPIRE_TIME = 15  
+LOGIN_BLOCK_TIME = 60           
+
+
+# SPECTACULAR SETTINGS
 SPECTACULAR_SETTINGS = {
     'TITLE': 'LOMFU',
     'DESCRIPTION': (

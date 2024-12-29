@@ -52,10 +52,12 @@ class CourseListAPI(APIView):
         IsTeacher,
     ]
     serializer_class = CourseOutputSerializer
-
+        
     def get_queryset(self):
         return course_list(owner=self.request.user)
 
+
+    @extend_schema(operation_id="list_teacher_courses",)
     def get(self, request):
         courses = self.get_queryset()
         serializer = self.serializer_class(courses, many=True)
@@ -108,7 +110,7 @@ class CourseDeleteAPI(APIView):
         IsAuthenticated,
         IsOwner,
     ]
-
+    serializer_class = None
     def get_object(self, pk):
         course = course_detail(pk=pk)
         self.check_object_permissions(self.request, course)

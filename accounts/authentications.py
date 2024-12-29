@@ -2,16 +2,21 @@ from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from .utils import LimitLoginAttempt
-from django.utils import timezone
+from .services import send_otp
+from rest_framework.exceptions import (
+    NotAuthenticated
+)
 
 User = get_user_model()
 
-login = LimitLoginAttempt()
+loginAttempt = LimitLoginAttempt()
 
 class CustomAuthentication(BaseBackend):
     
     def authenticate(self, request, email=None, password=None, **kwargs):
-        email = email.strip()
+        
+        if not email:
+            email = kwargs.get('username').strip()
 
         try:
             user = User.objects.get(
@@ -21,14 +26,16 @@ class CustomAuthentication(BaseBackend):
             return None
 
         
-        login(user.email)
+        loginAttempt(user.email)
         
         if user.check_password(password):
-            login.clear()
-            user.last_login = timezone.now()
-            user.save()
+            if not user.is_active and user.last_login is None:
+                send_otp(user.email)
+                raise NotAuthenticated("Account is not verified.")
+            loginAttempt.clear()
             return user
-        login.attempt()
+        loginAttempt.attempt()
+
         return None
 
     def get_user(self, user_id):

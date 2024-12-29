@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
+from django.contrib.auth import login
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .serializers import (
@@ -22,10 +22,9 @@ from .services import (
     user_change_password
 )
 
-from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
-from rest_framework_simplejwt.views import TokenObtainPairView
 from drf_spectacular.utils import extend_schema
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -71,13 +70,19 @@ class OTPVerifyAPI(APIView):
         serializer = OTPVerifySerializer(data=request.data)
         if serializer.is_valid():
             if verify_otp(serializer.data["email"],serializer.data["otp"]):
-                user = get_object_or_404(User, email=serializer.data["email"])
+                user = User.objects.get(email=serializer.data["email"])
+                user.last_login = timezone.now()
+                user.save()
                 refresh = RefreshToken.for_user(user)
-                token = {
-                    'refresh': str(refresh),
-                    'access': str(refresh.access_token)
-                }
-                return Response(token, status=status.HTTP_200_OK)
+                
+                return Response(
+                    {
+                        "message": "OTP verified successfully.",
+                        "refresh": str(refresh),
+                        "access": str(refresh.access_token)
+                    },
+                    status=status.HTTP_200_OK
+                    )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

@@ -3,11 +3,11 @@ from django.core.cache import cache
 from rest_framework import serializers
 from rest_framework import status
 from django.utils.timezone import now ,timedelta
+from django.conf import settings
 
-
-LOGIN_ATTEMPT_LIMIT = 3
-LOGIN_BLOCK_TIME = 60
-LOGIN_ATTEMPT_EXPIRE_TIME = 30
+LOGIN_ATTEMPT_LIMIT = settings.LOGIN_ATTEMPT_LIMIT
+LOGIN_BLOCK_TIME = settings.LOGIN_BLOCK_TIME
+LOGIN_ATTEMPT_EXPIRE_TIME = settings.LOGIN_ATTEMPT_EXPIRE_TIME
 
 
 class LimitLoginAttempt:
