@@ -94,12 +94,6 @@ source .venv/bin/activate #linux or mac
 pip install -r requirements.txt
 ```
 
-## migrate database
-
-```bash
-python manage.py migrate
-```
-
 ## create .env file for environment variable
 
 paste this in .env file you have created:
@@ -117,6 +111,12 @@ DB_NAME=db.sqlite3
 EMAIL_HOST_USER = akram@example.com
 EMAIL_HOST_PASSWORD = # paste app password here
 DEFAULT_FROM_EMAIL = akram@example.com
+```
+
+## migrate database
+
+```bash
+python manage.py migrate
 ```
 
 # create super user
