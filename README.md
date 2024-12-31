@@ -123,12 +123,16 @@ DEFAULT_FROM_EMAIL = akram@example.com
 
 ```bash
 python manage.py createsuperuser
+    # email: admin@example.com
+    # password: admin
+    # password (again): admin
 ```
 
 ## Run 
 
 ```bash
 python manage.py runserver
+    # http://127.0.0.1:8000/swagger/
 ```
 
 
