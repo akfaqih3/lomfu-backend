@@ -1,7 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+import base64
 
 from .serializers import (
     CourseInputSerializer,
@@ -30,7 +32,7 @@ class CourseCreateAPI(APIView):
         IsTeacher,
     ]
     serializer_class = CourseInputSerializer
-    
+    parser_classes = [MultiPartParser, FormParser]
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
@@ -39,7 +41,7 @@ class CourseCreateAPI(APIView):
                 subject=serializer.data['subject'],
                 title=serializer.data['title'],
                 overview=serializer.data['overview'],
-                photo=serializer.data['photo'] if 'photo' in serializer.data else None
+                photo=serializer.validated_data['photo'] if 'photo' in serializer.data else None
             )
             serializer = self.serializer_class(course)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -70,6 +72,7 @@ class CourseDetailAPI(APIView):
         IsOwner,
     ]
     serializer_class = CourseOutputSerializer
+    parser_classes = [MultiPartParser, FormParser]
 
     def get_object(self, pk):
         coures = course_detail(pk=pk)
@@ -79,7 +82,13 @@ class CourseDetailAPI(APIView):
     def get(self, request, pk):
         course = self.get_object(pk)
         serializer = self.serializer_class(course)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        course_detail = serializer.data
+        photo = course.photo
+        if photo:
+            with open(photo.path, 'rb') as img_file:
+                encoded_string = base64.b64encode(img_file.read()).decode('utf-8')
+            course_detail['photo'] = encoded_string
+        return Response(course_detail, status=status.HTTP_200_OK)
     
 @extend_schema(tags=['Teachers'])
 class CourseUpdateAPI(APIView):
@@ -97,7 +106,7 @@ class CourseUpdateAPI(APIView):
                 subject=serializer.data['subject'],
                 title=serializer.data['title'],
                 overview=serializer.data['overview'],
-                photo=serializer.data['photo'] if 'photo' in serializer.data else None
+                photo=serializer.validated_data['photo'] if 'photo' in serializer.data else None
             )
             serializer = self.serializer_class(course)
             return Response(serializer.data, status=status.HTTP_200_OK)
