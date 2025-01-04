@@ -22,4 +22,4 @@ class CourseOutputSerializer(serializers.ModelSerializer):
     subject = serializers.CharField(source='subject.title')
     class Meta:
         model = Course
-        fields = ['title', 'subject', 'overview', 'photo','created']
+        fields = ['id','title', 'subject', 'overview', 'photo','created']

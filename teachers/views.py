@@ -1,6 +1,5 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 import base64
@@ -32,7 +31,6 @@ class CourseCreateAPI(APIView):
         IsTeacher,
     ]
     serializer_class = CourseInputSerializer
-    parser_classes = [MultiPartParser, FormParser]
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
@@ -72,8 +70,6 @@ class CourseDetailAPI(APIView):
         IsOwner,
     ]
     serializer_class = CourseOutputSerializer
-    parser_classes = [MultiPartParser, FormParser]
-
     def get_object(self, pk):
         coures = course_detail(pk=pk)
         self.check_object_permissions(self.request, coures)
