@@ -24,7 +24,7 @@ from .selectors import (
 
 from drf_spectacular.utils import extend_schema
 
-@extend_schema(tags=['Teachers'])
+@extend_schema(tags=['Teachers'], responses={201: CourseOutputSerializer})
 class CourseCreateAPI(APIView):
     permission_classes = [
         IsAuthenticated,
