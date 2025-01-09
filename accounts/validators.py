@@ -58,6 +58,8 @@ class PhoneValidator:
     def validate(self, phone):
         if len(phone) != self.length:
             raise serializers.ValidationError('Phone number must be {} characters long'.format(self.length))
+        if not phone.isdigit():
+            raise serializers.ValidationError('Phone number must be a number')
         if not any(phone.startswith(prefix) for prefix in self.allowed_prefixes):
             raise serializers.ValidationError('Phone number invalid')
         if User.objects.filter(phone=phone).first():
