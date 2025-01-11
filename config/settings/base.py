@@ -148,8 +148,8 @@ AUTH_USER_MODEL = 'accounts.User'
 
 # CUSTOM AUTHENTICATION BACKENDS
 AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
     'accounts.authentications.CustomAuthentication',
-    # 'django.contrib.auth.backends.ModelBackend',
 ]
 
 # REST FRAMEWORK SETTINGS
