@@ -31,7 +31,7 @@ class CustomAuthentication(BaseBackend):
         if user.check_password(password):
             if not user.is_active and user.last_login is None:
                 send_otp(user.email)
-                raise NotAuthenticated("Account is not verified.")
+                raise NotAuthenticated({"detail":"Account is not verified."})
             loginAttempt.clear()
             return user
         loginAttempt.attempt()

@@ -33,10 +33,10 @@ class UserInputSerializer(serializers.Serializer):
             PhoneValidator().validate(data['phone'])
         else:
             if data['role'] == UserRole.TEACHER:
-                raise serializers.ValidationError('Teachers must have a phone number')
+                raise serializers.ValidationError({"detail":"Teachers must have a phone number"})
 
         if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError('Passwords do not match')
+            raise serializers.ValidationError({"detail":"Passwords do not match"})
         
         return data
     
@@ -64,7 +64,7 @@ class UserUpdateSerializer(serializers.Serializer):
             PhoneValidator().validate(data['phone'])
         else:
             if data['role'] == UserRole.TEACHER:
-                raise serializers.ValidationError('Teachers must have a phone number')
+                raise serializers.ValidationError({"detail":"Teachers must have a phone number"})
                 
         return data
     
@@ -77,5 +77,5 @@ class UserChangePasswordSerializer(serializers.Serializer):
 
     def validate(self, data):
         if data['new_password'] != data['confirm_password']:
-            raise serializers.ValidationError('Passwords do not match')
+            raise serializers.ValidationError({"detail":"Passwords do not match"})
         return data

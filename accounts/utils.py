@@ -28,7 +28,7 @@ class LimitLoginAttempt:
             mins_remaining = int(time_remaining.total_seconds() / 60)
             
             raise serializers.ValidationError(
-                {"message":f"Account temporarily locked. Try again after {mins_remaining} minutes."},
+                {"detail":f"Account temporarily locked. Try again after {mins_remaining} minutes."},
                 status.HTTP_429_TOO_MANY_REQUESTS
             )
         
@@ -46,14 +46,14 @@ class LimitLoginAttempt:
             cache.delete(self.attempt_key)
 
             raise serializers.ValidationError(
-                {"message":f"Too many failed login attempts. Account locked for {self.block_time} minutes."},
+                {"detail":f"Too many failed login attempts. Account locked for {self.block_time} minutes."},
                 status.HTTP_429_TOO_MANY_REQUESTS
             )
         
         cache.set(self.attempt_key,attempts,timeout=self.expire_time*60)
         
         raise serializers.ValidationError(
-            {"message":f"Invalid credentials. Try again. You have {self.attempts_limit - attempts} attempts remaining."},
+            {"detail":f"Invalid credentials. Try again. You have {self.attempts_limit - attempts} attempts remaining."},
             status.HTTP_401_UNAUTHORIZED
         )
     
@@ -72,7 +72,7 @@ class OTP_manager:
     def verify_otp(self, identifier, otp_code):
         
         if not cache.get(identifier):
-            raise serializers.ValidationError(f"invalid {identifier}.")
+            raise serializers.ValidationError({"detail":f"invalid {identifier}."})
         
         if cache.get(identifier) == otp_code:
             cache.delete(identifier)

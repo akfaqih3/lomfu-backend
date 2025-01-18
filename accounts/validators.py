@@ -12,21 +12,21 @@ class PasswordValidator:
         
     def validate(self, password):
         if len(password) < self.min_length:
-            raise serializers.ValidationError('Password must be at least {} characters long'.format(self.min_length))
+            raise serializers.ValidationError({"detail":f"Password must be at least {self.min_length} characters long"})
         if len(password) > self.max_length:
-            raise serializers.ValidationError('Password must be at most {} characters long'.format(self.max_length))
+            raise serializers.ValidationError({"detail":f"Password must be at most {self.max_length} characters long"})
         if self.upper:
             if not any(char.isupper() for char in password):
-                raise serializers.ValidationError('Password must contain at least one uppercase letter')
+                raise serializers.ValidationError({"detail":"Password must contain at least one uppercase letter"})
         if self.lower:
             if not any(char.islower() for char in password):
-                raise serializers.ValidationError('Password must contain at least one lowercase letter')
+                raise serializers.ValidationError({"detail":"Password must contain at least one lowercase letter"})
         if self.number:
             if not any(char.isdigit() for char in password):
-                raise serializers.ValidationError('Password must contain at least one number')
+                raise serializers.ValidationError({"detail":"Password must contain at least one number"})
         if self.special:
             if not any(char in "!@#$%^&*()-_+=[]{}|\\:;\"'<>,.?/~`" for char in password):
-                raise serializers.ValidationError('Password must contain at least one special character')
+                raise serializers.ValidationError({"detail":"Password must contain at least one special character"})
         
         return password
     
@@ -38,9 +38,9 @@ class EmailValidator:
     
     def validate(self, email):
         if not email:
-            raise serializers.ValidationError('The given email must be set')
+            raise serializers.ValidationError({"detail":"The given email must be set"})
         if User.objects.filter(email=email).first():
-            raise serializers.ValidationError('Email already exists')
+            raise serializers.ValidationError({"detail":"Email already exists"})
 
         return email
     
@@ -57,13 +57,13 @@ class PhoneValidator:
         
     def validate(self, phone):
         if len(phone) != self.length:
-            raise serializers.ValidationError('Phone number must be {} characters long'.format(self.length))
+            raise serializers.ValidationError({"detail":f"Phone number must be {self.length} characters long"})
         if not phone.isdigit():
-            raise serializers.ValidationError('Phone number must be a number')
+            raise serializers.ValidationError({"detail":"Phone number must be a number"})
         if not any(phone.startswith(prefix) for prefix in self.allowed_prefixes):
-            raise serializers.ValidationError('Phone number invalid')
+            raise serializers.ValidationError({"detail":"Phone number invalid"})
         if User.objects.filter(phone=phone).first():
-            raise serializers.ValidationError('Phone already exists')
+            raise serializers.ValidationError({"detail":"Phone already exists"})
         
         return phone
     
