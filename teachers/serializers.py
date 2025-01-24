@@ -8,6 +8,7 @@ from courses.models import (
         
 
 class CourseInputSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     subject = serializers.SlugRelatedField(
         slug_field='slug',
         queryset=Subject.objects.all(),
