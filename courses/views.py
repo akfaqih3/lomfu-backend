@@ -43,7 +43,7 @@ class SubjectViewSet(viewsets.ViewSet):
             }
         )
     
-
+@extend_schema(tags=['Courses'])
 class CourseListAPI(ListAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
@@ -64,7 +64,7 @@ class CourseListAPI(ListAPIView):
     ordering = ['-created']
 
 
-
+@extend_schema(tags=['Courses'])
 class CourseDetailAPI(RetrieveAPIView):
   queryset = Course.objects.all()
   serializer_class = CourseSerializer
