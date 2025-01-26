@@ -1,15 +1,20 @@
 from rest_framework import viewsets
-from rest_framework import serializers
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
+
 from .models import (
     Subject,
-  
+    Course,
 )
 from .serializers import (
     SubjectsOutputSerializer,
     SubjectCoursesOutputSerializer,
+    CourseSerializer,
 )
 
+from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.pagination import LimitOffsetPagination
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 
 @extend_schema(tags=['Courses'])
@@ -37,3 +42,36 @@ class SubjectViewSet(viewsets.ViewSet):
                 'courses': serializer.data
             }
         )
+    
+
+class CourseListAPI(ListAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+    pagination_class = LimitOffsetPagination
+    pagination_class.default_limit = 10
+    pagination_class.max_limit = 50
+    pagination_class.limit_query_param = 'size'
+    pagination_class.offset_query_param = 'index'
+
+    filter_backends = [
+        SearchFilter,
+        OrderingFilter,
+        DjangoFilterBackend,
+    ]
+    search_fields = ['title','overview']
+    filterset_fields = ['subject__slug','owner__name']
+    ordering_fields = "__all__"
+    ordering = ['-created']
+
+
+
+class CourseDetailAPI(RetrieveAPIView):
+  queryset = Course.objects.all()
+  serializer_class = CourseSerializer
+  permission_classes = []
+  authentication_classes = []
+
+  pk_url_kwarg = 'id'
+  lookup_field = 'id'
+  
+    
