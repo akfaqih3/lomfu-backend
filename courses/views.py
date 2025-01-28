@@ -48,6 +48,8 @@ class CourseListAPI(ListAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     pagination_class = LimitOffsetPagination
+    permission_classes = []
+    authentication_classes = []
     pagination_class.default_limit = 10
     pagination_class.max_limit = 50
     pagination_class.limit_query_param = 'size'
