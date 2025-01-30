@@ -60,4 +60,3 @@ class CoursesEnrolledAPI(ListAPIView):
             self.get_queryset(),
             status=status.HTTP_200_OK
         )
-       
