@@ -1,10 +1,15 @@
-from .models import User, Profile
+from .models import User, Profile,UserRole
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.core.mail import send_mail
 from .utils import OTP_manager
 from rest_framework import serializers
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.authentication import authenticate
+from django.contrib.auth import login
 from django.contrib.auth.models import Group
+from accounts.social_auth.google_oauth import GoogleOAuth2
+from django.utils import timezone
 
 def user_create(name, email, role, password, phone=None):
     
@@ -21,7 +26,8 @@ def user_create(name, email, role, password, phone=None):
         raise serializers.ValidationError({"detail":e})
     
     profile_create(user, None, None)
-    send_otp(user.email)
+    if not user.is_active:
+        send_otp(user.email)
     return user
 
 
@@ -86,3 +92,25 @@ def user_change_password(user, old_password, new_password):
     user.set_password(new_password)
     user.save()
     return user
+
+
+
+def google_login(code):
+    google = GoogleOAuth2(code)
+    user_info = google.get_user()
+    user = User.objects.filter(email=user_info['email']).first()
+    if user is None:
+        user = user_create(
+            user_info['name'],
+            user_info['email'],
+            UserRole.STUDENT,
+            settings.SECRET_KEY,
+        )
+        user.is_active = user_info['verified_email']
+
+    # user.profile.photo = user_info['picture']
+    user.last_login = timezone.now()
+    user.save()     
+
+    refresh = RefreshToken.for_user(user)
+    return refresh

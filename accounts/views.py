@@ -5,6 +5,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.contrib.auth import login
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from rest_framework.permissions import AllowAny
+from rest_framework import serializers
 from .serializers import (
     UserInputSerializer,
     UserOutputSerializer,
@@ -19,12 +21,14 @@ from .services import (
     send_otp,
     verify_otp,
     user_update,
-    user_change_password
+    user_change_password,
+    google_login
 )
 
 from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema
 from django.utils import timezone
+
 
 User = get_user_model()
 
@@ -135,5 +139,43 @@ class UserChangePasswordAPI(APIView):
                 serializer.data['new_password']
             )
             return Response({"message": "Password changed successfully."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+class LoginByGoogleView(APIView):
+
+    class input_serializer(serializers.Serializer):
+        code = serializers.CharField(max_length=100)
+
+    serializer_class = input_serializer
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        code = request.GET.get('code')
+        if code is None:
+            return Response({"message": "Invalid code."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {
+                "code": code
+            },
+            status=status.HTTP_200_OK
+        )
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            code = serializer.data['code']
+            refresh = google_login(code)
+            if refresh:
+                return Response(
+                    {
+                        "message": "Login successfully.",
+                        "refresh": str(refresh),
+                        "access": str(refresh.access_token)
+                    },
+                    status=status.HTTP_200_OK
+                )
+            return Response({"message": "Invalid code."}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
