@@ -12,7 +12,8 @@ from .views import (
     OTPSendAPI,
     OTPVerifyAPI,
     UserUpdateAPI,
-    UserChangePasswordAPI
+    UserChangePasswordAPI,
+    LoginByGoogleView,
 )
 
 urlpatterns = [
@@ -28,4 +29,6 @@ urlpatterns = [
     path('change-password/', UserChangePasswordAPI.as_view()),
     path('otp-send/', OTPSendAPI.as_view()),
     path('otp-verify/', OTPVerifyAPI.as_view()),
+
+    path('google/login/', LoginByGoogleView.as_view(), name='google_login'),
 ]

@@ -8,6 +8,7 @@ from courses.models import (
         
 
 class CourseInputSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     subject = serializers.SlugRelatedField(
         slug_field='slug',
         queryset=Subject.objects.all(),
@@ -22,4 +23,4 @@ class CourseOutputSerializer(serializers.ModelSerializer):
     subject = serializers.CharField(source='subject.title')
     class Meta:
         model = Course
-        fields = ['title', 'subject', 'overview', 'photo','created']
+        fields = ['id','title', 'subject', 'overview', 'photo','created']

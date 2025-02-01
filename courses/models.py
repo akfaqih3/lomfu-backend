@@ -54,6 +54,15 @@ class Course(models.Model):
         upload_to='courses/courses/photos/%Y/%m/%d/',
         blank=True
         )
+    
+    @property
+    def total_students(self) -> int:
+        return self.students.count()
+    
+    @property
+    def total_modules(self) -> int:
+        return self.modules.count()
+    
 
 
     class Meta:

@@ -17,7 +17,7 @@ def course_create(owner,subject, title, overview, photo=None):
             photo=photo
             )
     except Exception as e:
-        raise ValidationError(e)
+        raise ValidationError({"detail":e})
     
     return course
 
@@ -35,7 +35,7 @@ def course_update(pk,subject=None, title=None, overview=None, photo=None):
             course.photo = photo
         course.save()
     except Exception as e:
-        raise ValidationError(e)
+        raise ValidationError({"detail":e})
     
     return course
 
@@ -43,4 +43,4 @@ def course_delete(course):
     try:
         course.delete()
     except Exception as e:
-        raise ValidationError(e)
+        raise ValidationError({"detail":e})

@@ -44,12 +44,14 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'django_rest_passwordreset',
+    'django_filters',
 
     # apps
     'api',
     'accounts',
     'teachers',
     'courses',
+    'students',
 
     'drf_spectacular',
     'drf_spectacular_sidecar'
@@ -148,8 +150,8 @@ AUTH_USER_MODEL = 'accounts.User'
 
 # CUSTOM AUTHENTICATION BACKENDS
 AUTHENTICATION_BACKENDS = [
-    'accounts.authentications.CustomAuthentication',
     'django.contrib.auth.backends.ModelBackend',
+    'accounts.authentications.CustomAuthentication',
 ]
 
 # REST FRAMEWORK SETTINGS
@@ -157,7 +159,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_SCHEMA_CLASS': 'api.custom_schema.CustomSchemaGenerator',
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ],
 }
 
 # SIMPLE_JWT SETTINGS
@@ -184,7 +191,13 @@ LOGIN_ATTEMPT_EXPIRE_TIME = 15
 LOGIN_BLOCK_TIME = 60           
 
 
-# SPECTACULAR SETTINGS
+# GOOGLE SETTINGS
+GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = config('GOOGLE_CLIENT_SECRET')
+GOOGLE_REDIRECT_URI = config('GOOGLE_REDIRECT_URI')
+
+
+
 SPECTACULAR_SETTINGS = {
     'TITLE': 'LOMFU',
     'DESCRIPTION': (
@@ -192,16 +205,13 @@ SPECTACULAR_SETTINGS = {
         '**GitHub:** [https://github.com/akfaqih3/lomfu-backend](https://github.com/akfaqih3/lomfu-backend)'
     ),
     'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
-
-    # OTHER SETTINGS
-
-    'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
-    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
-    'REDOC_DIST': 'SIDECAR',
-
-    'APPEND_COMPONENTS_HTML': False,
-    'tags': [
+    
+    'TAGS': [
+        {
+            'name': 'Accounts',
+            'description': 'Accounts related operations',
+        
+        },
         {
             'name': 'Courses',
             'description': 'Courses related operations',
@@ -210,9 +220,10 @@ SPECTACULAR_SETTINGS = {
             'name': 'Teachers',
             'description': 'Teachers related operations',
         },
+        
         {
-            'name': 'Accounts',
-            'description': 'Accounts related operations',
+            'name': 'Students',
+            'description': 'Students related operations',
         },
     ],
 }

@@ -19,3 +19,12 @@ class SubjectCoursesOutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ['title',  'overview', 'photo','created']
+
+
+
+class CourseSerializer(serializers.ModelSerializer):
+        subject = serializers.CharField(source='subject.title')
+        owner = serializers.CharField(source='owner.name')
+        class Meta:
+            model = Course
+            fields = ['id','owner','title','subject', 'overview', 'photo','total_students','total_modules','created']
