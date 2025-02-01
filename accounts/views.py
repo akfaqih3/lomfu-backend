@@ -6,8 +6,7 @@ from django.contrib.auth import login
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.permissions import AllowAny
-from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 from .serializers import (
     UserInputSerializer,
     UserOutputSerializer,
@@ -28,7 +27,6 @@ from .services import (
 
 from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema
-from drf_spectacular.openapi import OpenApiCallback
 from django.utils import timezone
 
 
