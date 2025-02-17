@@ -117,6 +117,12 @@ DB_NAME=db.sqlite3
 EMAIL_HOST_USER = akram@example.com
 EMAIL_HOST_PASSWORD = # paste app password here
 DEFAULT_FROM_EMAIL = akram@example.com
+
+# GOOGLE SETTINGS
+GOOGLE_CLIENT_ID = # paste your google client id here
+GOOGLE_CLIENT_SECRET = # paste your google client secret here
+GOOGLE_REDIRECT_URI = http://127.0.0.1:8000/api/v1/accounts/google/login/
+
 ```
 
 # create super user
